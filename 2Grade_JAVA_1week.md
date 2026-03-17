@@ -27,8 +27,8 @@ class C {
 // code
 }
 ```
--- 위 코드와 같이 class 작성이 있으면 (.class)파일 여러개 생김.
--- 컴파일은 자동으로 되는 것이 자바의 장점 중 하나.
+### 위 코드와 같이 class 작성이 있으면 (.class)파일 여러개 생김.
+### 컴파일은 자동으로 되는 것이 자바의 장점 중 하나.
 
 # 자바의 특징(2)
 - 멀티스레드
@@ -82,15 +82,16 @@ public class Hello20230844 {
 ### 주석문
 --- // 한 라인 주석
 --- /* 여러 행 주석 */
--- main() 메소드
+
+### main() 메소드
 --- 자바 프로그램은 main()에서 실행 시작
 ```
 public static void main(String[] args) {
 }
 ```
---- public static void으로 선언
---- String[] args로 실행 인자를 전달 받음
---- eclipse 꿀팁 : class 만들 때 체크박스 체크 시 자동으로 만들어짐 
+### public static void으로 선언
+### String[] args로 실행 인자를 전달 받음
+### eclipse 꿀팁 : class 만들 때 체크박스 체크 시 자동으로 만들어짐 
 
 ### 메소드
 --- C/C++에서의 함수를 메소드로 지칭
