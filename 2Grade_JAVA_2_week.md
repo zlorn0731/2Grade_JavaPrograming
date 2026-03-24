@@ -228,11 +228,11 @@ System.out.println(a);
 - 
 | 타입      | 용어    | 크기 |
 |-----------|--------|-------|
-| 논리 타입 | boolean | [] | 
-| 문자 타입 | char    | □□ | 
-| 정수 타입 | byte    | □ |
-| 정수 타입 | short   | □□ |
-| 정수 타입 | int     | □□□□ |
-| 정수 타입 | long    | □□□□□□□□ |
-| 실수 타입 | float   | □□□□ |
-| 실수 타입 | double  | □□□□□□□□ |
+| 논리 타입 | boolean | 1bit [] | 
+| 문자 타입 | char    | 2byte □□ | 
+| 정수 타입 | byte    | 1byte □ |
+| 정수 타입 | short   | 2byte □□ |
+| 정수 타입 | int     | 4byte □□□□ |
+| 정수 타입 | long    | 8byte □□□□□□□□ |
+| 실수 타입 | float   | 4byte □□□□ |
+| 실수 타입 | double  | 8byte □□□□□□□□ |
