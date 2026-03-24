@@ -142,4 +142,18 @@ void null() { } // 자바의 예약어 null 사용 ❌
 class %calc { } // 특수 문자 % 사용 ❌
 ```
 
+### 자바 키워드
+- 
+| 키워드 | 키워드 | 키워드 | 키워드 | 키워드 |
+|--------|-------|-------|--------|---------|
+| abstract | continue | float | native | strictfp | void |  
+| assert | default | for | new | super | volatile |
+| boolean | do | if | package | switch | while |  
+| break | double | implements | private | synchronized | 
+| byte | else | import | protected | this |  
+| case | enum | instanceof | public | throw |
+| catch | extends | int | return | throws |  
+| char | final | interface | short | transient |
+| class | finally | long | static | try |
 
+### 좋은 이름 붙이는 언어 관습
