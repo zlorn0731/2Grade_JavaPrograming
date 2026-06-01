@@ -366,3 +366,113 @@ public class Circle() {
 
 this를 사용하여 수정한 경우
 ```
+
+### this가 필요한 경우
+- this의 필요성
+  - 객체의 멤버 변수와 메소드 변수의 이름이 같은 경우
+  - 다른 메소드 호출 시 객체 자신의 레퍼런스를 전달할 때
+  - 메소드가 객체 자신의 레퍼런스를 반환할 때
+
+### 객체 속에서의 this
+```
+public class Circle() {
+	int radius;
+	public Circle(int radius) {
+		this.radius = radius;
+	}
+	public void set(int radius) {
+		this.radius = radius;
+	}
+
+	public static void main(String[] args) {
+		Circle ob1 = new Circle(1);
+		Circle ob2 = new Circle(2);
+		Circle ob3 = new Circle(3);
+
+		ob1.set(4); // radius(1) → radius(4)
+		ob2.set(5); // radius(2) → radius(5)
+		ob3.set(6); // radius(3) → radius(6)
+	}
+}
+```
+
+### this()로 다른 생성자 호출
+- this()
+  - 클래스 내의 다른 생성자 호출
+  - 생성자 내에서만 사용 가능
+  - 반드시 생성자 코드의 제일 처음에 수행
+ 
+### this() 사용 실패 예
+```
+public Book() {
+	System.out.println("생성자가 호출되었음");
+	this(null, null, 0); // 생성자의 첫 번째 문장이 아니기 때문에 컴파일 오류
+}
+```
+
+#### 예제 4-5 : this()로 다른 생성자 호출
+- 예제 4-4에서 작성한 Book 클래스의 생성자를 this()를 이용하여 수정하라
+```
+public class Book {
+	String title;
+	String author;
+	void show() { System.out.println(title + " " + author); }
+
+	public Book(String title) {
+		this(title, "작자미상");
+	}
+
+	public Book(String title, String author) {
+		this.title = title; this.author = author;
+	}
+
+	public static void main(String[] args) {
+		Book littlePrince = new Book("어린왕자", "생텍쥐페리");
+		Book loveStory = new Book("춘향전");
+		Book emptyBook = new Book();
+		loveStory.show();
+	}
+}
+```
+
+### 객체의 치환
+- 객체의 치환은 객체가 복사되는 것이 아니며 레퍼런스가 복사된다
+```
+public class Circle() {
+	int radius;
+	public Circle(int radius) { this.radius = radius; }
+	public void set(int radius) { this.radius = radius; }
+
+	public static void main(String[] args) {
+		Circle ob1 = new Circle(1);
+		Circle ob2 = new Circle(2);
+		Circle s;
+
+		s = ob2;
+		ob1 = ob2; // 객체 치환
+		System.out.println("ob1.radius = " + ob1.radius);
+		System.out.println("ob2.radius = " + ob2.radius);
+	}
+}
+
+-------------------------------------------------------------
+
+ob1 → radius(1) → radius(2) // ob1은 쓰레기값
+ob2 → radius(2)
+s → radius(2)
+```
+
+### 객체 배열
+- 객체 배열 생성 및 사용
+```
+Circle [] c; // Circle 배열에 대한 레퍼런스 변수 c 선언 
+c = new Circle[5]; // 레퍼런스 배열 생성
+
+for(int i = 0; i < c.length; i++) // c.length는 배열 c의 크기로서 5
+	c[i] = new Circle(i); // 배열의 각 원소 객체 생성
+```
+```
+for(int i = 0; i < c.length; i++) // 배열에 있는 모든 Circle 객체의 면적 출력
+	System.out.print((int)(c[i].getArea()) + " "); // c[i].getArea() 배열의 원소 객체 사용
+```
+32pg까지
