@@ -201,3 +201,168 @@ public class Rectangle {
 #### 예제 4-3 : 두 개의 생성자를 가진 Circle 클래스
 - 다음 코드는 2개의 생성자를 가진 Circle 클래스이다. 실행 결과는 무엇인가?
 ```
+public class Circle {
+	int radius;
+	String name;
+
+	// 생성자 이름은 클래스 이름과 동일
+	public Circle() { // 매개 변수 없는 생성자
+		radius = 1; name = ""; // radius의 초기값은 1
+	}
+
+ 	// 생성자는 리턴 타입 없음
+	public Circle(int r, String n) { // 매개 변수를 가진 생성자
+		radius = r; name = n;
+	}
+
+	public double getArea() {
+		return 3.14 * radius * radius;
+	}
+
+	public static void main(String[] args) {
+		Circle pizza = new Circle(10, "자바피자"); // Circle 객체 생성, 반지름 10
+
+		double area = pizza.getArea();
+		System.out.println(pizza.name + "의 면적은" + area);
+
+		Circle donut = new Circle(); // Circle 객체 생성, 반지름 1
+		donut.name = "도넛피자";
+		area = donut.getArea();
+		System.out.println(donut.name + "의 면적은" + area);
+	}
+}
+```
+
+### 생성자의 특징
+- 생성자는 메소드
+- 생성자 이름은 클래스 이름과 반드시 동일
+- 생성자 여러 개 작성 가능(오버로딩)
+- 생성자는 new를 통해 객체를 생성할 때, 객체당 한 번 호출
+- 생성자는 리턴 타입을 지정할 수 없음
+- 생성자의 목적은 객체 초기화
+- 생성자는 객체가 생성될 때 반드시 호출됨
+  - 그러므로 하나 이상 선언되어야 함
+    - 개발자가 생성자를 작성하지 않았으면 컴파일러가 자동으로 기본 생성자 삽입
+
+#### 예제 4-4 : 생성자 선언 및 활용 연습
+- 제목과 저자를 나타내라 title과 author 필드를 가진 Book 클래스를 작성하고, 생성자를 작성하여 필드를 초기화하라
+```
+public class Book {
+	String title;
+	String author;
+
+	public Book(String t) { // 생성자
+		title = t; author = "작자미상";
+	}
+
+	public Book(String t, String a) {
+		title = t; author = a;
+	}
+
+	public static void main(String[] args) {
+		Book littlePrince = new Book("어린왕자", "생텍쥐페리");
+		Book loveStory = new Book("춘향전");
+		System.out.println(littlePrince.title + " " + littlePrince.author);
+		System.out.println(loveStory.title + " " + loveStory.author);
+	}
+}
+```
+
+### 기본 생성자
+- 기본 생성자(default constructor)
+  - 매개 변수 없고 아무 작업 없이 단순 리턴하는 생성자
+  - 디폴트 생성자라고도 부름
+- 클래스에 생성자가 하나도 선언되지 않은 경우, 컴파일러에 의해 자동으로 삽입
+```
+[개발자가 작성한 코드]
+
+public class Circle() {
+	int radius;
+	void set(int r) { radius = r; }
+	double getArea() { return 3.14 * radius * radius; }
+
+	public static void main(String[] args) {
+		Circle pizza = new Circle();
+		pizza.set(3);
+	}
+}
+
+이 코드에는 생성자가 없지만 컴파일 오류가 생기지 않음
+```
+```
+[이유]
+
+public class Circle() {
+	int radius;
+	void set(int r) { radius = r; }
+	double getArea() { return 3.14 * radius * radius; }
+
+	public Circle() {} // 컴파일러에 의해 자동 삽입된 기본 생성자
+
+	public static void main(String[] args) {
+		Circle pizza = new Circle();
+		pizza.set(3);
+	}
+}
+
+컴파일러가 자동으로 기본 생성자 삽입
+```
+
+### 기본 생성자가 자동 생성되지 않는 경우
+- 개발자 클래스에 생성자가 하나라도 작성한 경우
+  - 기본 생성자 자동 삽입되지 않음
+```
+public class Circle() {
+	int radius;
+	void set(int r) { radius = r; }
+	double getArea() { return 3.14 * radius * radius; }
+
+	// 컴파일러가 기본 생성자를 자동 생성하지 않음 | public Circle() {} |
+	public Circle(int r) {
+		radius = r;
+	}
+
+	public static void main(String[] args) {
+		Circle pizza = new Circle(10);
+		System.out.println(pizza.getArea());
+
+		Circle donut = new Circle(); // 컴파일 오류, 해당하는 생성자가 없음
+		System.out.println(donut.getArea());
+	}
+}
+```
+
+### this 레퍼런스
+- this
+  - 객체 자신에 대한 레퍼런스
+    - 컴파일러에 의해 자동 관리, 개발자는 사용하기만 하면 됨
+    - this.멤버 형태로 멤버 사용
+```
+public class Circle() {
+	int radius;
+
+	public Circle() { radius = 1; }
+	public Circle(int r) { radius = r; }
+	double getArea() {
+		return 3.14 * radius * radius;
+	}
+	....
+}
+
+=
+
+public class Circle() {
+	int radius;
+
+	public Circle() { this.radius = 1; }
+	public Circle(int radius) {
+		this.radius = radius;
+	}
+	double getArea() {
+		return 3.14 * this.radius * this.radius;
+	}
+	...
+}
+
+this를 사용하여 수정한 경우
+```
