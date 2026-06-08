@@ -739,4 +739,344 @@ public class ArrayParmeterEx {
   ↑
  [ ] c
 ```
-42pg부터
+
+### 메소드 오버로딩
+- 메소드 오버로딩(Overloading)
+  - 이름이 같은 메소드 작성, 다음 2개의 조건
+    - 매개변수의 개수나 타입이 서로 다르고
+    - 이름이 동일한 메소드들
+  - 리턴 타입은 오버로딩과 관련 없음
+    - 오버로딩의 성공 여부를 따질 때 리턴 타입은 고려하지 않음
+```
+// 메소드 오버로딩이 성공한 사례
+
+class MethodOverloading {
+	public int getSUm(int i, int j) {
+		return i + j;
+	}
+	public int getSum(int i, int j, int k) {
+		return i + j + k;
+	}
+}
+```
+```
+// 메소드 오버로딩이 실패한 사례
+
+class MethodOverloadingFail {
+	public int getSum(int i, int j) {
+		return i + j;
+	}
+	public double getSum(int i, int j) {
+		return (double(i + j);
+	}
+}
+
+두 개의 getSum() 메소드는 매개변수의 개수, 타입이 모두 같기 때문에 메소드 오버로딩 실패
+```
+
+### 오버로딩된 메소드 호출
+```
+public static void main(String args[]) {
+	MethodSample a = new MethodSample();
+
+	int i = a.getSum(1, 2);
+
+	int j = a.getSum(1, 2, 3);
+
+	double k = a.getSum(1.1, 2.2);
+}
+
+매개 변수의 개수와 타입이 서로 다른 3 함수 호출
+```
+```
+public class MethodSample {
+	public int getSum(int i, int j) {
+		return i + j;
+	}
+
+	public int getSum(int i, int j, int k) {
+		return i + j + k;
+	}
+
+	public double getSum(double i, double j) {
+		return i + j;
+	}
+}
+```
+
+### 객체의 소멸과 가비지 컬렉션
+- 객체 소멸
+  - new에 의해 할당된 객체 메모리를 자바 가상 기계의 가용 메모리로 되돌려 주는 행위
+- 자바 응용프로그램에서 임의로 객체 소멸할 수 없음
+  - 객체 소멸은 자바 가상 기계의 고유한 역할
+  - 자바 개발자에게는 매우 다행스러운 기능
+    - C/C++에서는 할당받은 객체를 개발자가 되돌려 주어야 함
+      - C/C++ 프로그램 작성을 어렵게 만드는 요인
+- 가비지
+  - 자신을 가리키는 레퍼런스가 하나도 없는 객체
+    - 프로그램에서 사용할 수 없게 된 메모리
+- 가비지 컬렉션
+  - 자바 가상 기계의 가비지 컬렉터가 자동으로 가비지 수집 반환
+
+### 가비지 사례
+```
+Person a, b;
+a = new Person("이몽룡");
+b = new Person("성춘향");
+b = a; // b가 가리키던 객체는 가비지가 됨
+```
+```
+        Person 객체
+a [   ]→["이몽룡"]
+      ↗
+b [   ]↛ ["성춘향"]
+            ↑가비지 객체
+```
+
+#### 예제 4-9 : 가비지의 발생
+- 다음 코드에서 언제 가비지가 발생하는지 설명하라
+```
+public class GarbageEx {
+	public static void main(String[] args) {
+		String a = new String("Good");
+		String b = new String("Bad");
+		String c = new String("Normal");
+		String d, e;
+		a = null;
+		d = c;
+		c = null;
+	}
+}
+```
+```
+a[   ]→["Good"]
+b[   ]→["Bad"]
+c[   ]→["Normal"]
+d[   ]
+e[   ]
+
+(a) 초기 객체 생성 시(라인 6까지)
+-----------------------------------
+a[   ]		["Good"] ← 가비지
+b[   ]→		["Bad"]
+c[   ]      ["Normal"]
+d[   ]↗
+e[   ]
+
+(b) 코드 전체 실행 후
+```
+
+### 가비지 컬렉션
+- 가비지 컬렉션
+  - 자바에서 가비지를 자동 회수하는 과정
+    - 가용 메모리로 반환
+  - 가비지 컬렉션 스레드에 의해 수행
+  - 언제?
+    - 아무도 모름. 가용 메모리 량이 일정 수준 이하로 떨어질 때
+- 개발자에 의한 강제 가비지 컬렉션
+  - System 또는 Runtime 객체의 gc() 메소드 호출
+  ```
+  System.gc(); // 가비지 컬렉션 작동 요청
+  ```
+    - 이 코드는 자바 가상 기계에 강력한 가비지 컬렉션 요쳥
+      - 그러나 자바 가상 기계가 가비지 컬렉션 시점을 전적으로 판단
+
+### 자바의 패키지 개념
+- 패키지
+  - 관련 있는 클래스 파일(컴파일된 .class)을 저장하는 디렉터리
+  - 자바 응용프로그램은 하나 이상의 패키지로 구성
+```
+              - 자바 응용프로그램 -
+
+  [패키지 A]        [패키지 B]        [패키지 C]
+클래스 파일      |   클래스 파일    |  클래스 파일
+     클래스 파일 |      클래스 파일 |      클래스 파일
+ 클래스 파일     |  클래스 파일     | 클래스 파일
+```
+
+### 접근 지정자
+- 자바의 접근 지정자
+  - 4가지
+    - private, protected, public, 디폴트(접근 지정자 생략)
+- 접근 지정자의 목적
+  - 클래스나 일부 멤버를 공개하여 다른 클래스에서 접근하도록 허용
+  - 객체 지향 언어의 캡슐화 정책은 멤버를 보호하는 것
+    - 접근 지정은 캡슐화에 묶인 보호를 일부 해제할 목적
+- 접근 지정자에 따른 클래스나 멤버의 공개 범위
+```
+      private     <       디폴트      <          protected            <     public
+외부로부터 완벽차단 | 동일 패키지에 허용 | 동일 패키지와 자식 클래스에 허용 | 모든 클래스에 허용
+------------------|-------------------|-------------------------------|------------------→
+```
+
+### 클래스 접근 지정
+- 클래스 접근 지정
+  - 다른 클래스에서 사용하도록 허용할 지 지정
+  - public 클래스
+    - 다른 모든 클래스에게 접근 허용
+  ```
+  public class World { // public 클래스
+  .........
+  }
+  ```
+  - 디폴트 클래스(접근지정자 생략)
+    - package-private 라고도 함
+    - 같은 패키지의 클래스에만 접근 허용
+  ```
+  class Local { // 디폴트 클래스
+  .........
+  }
+  ```
+```
+[패키지 P]                |                                   [패키지 Q]
+-------------------------------------------------------------------------------------------------------------------
+                         |
+class A {                |     public class B {         class C {                     class D {
+	void f() {           |           ...                    void g() {                     void h() {
+		B b = new B();   |     }                                 B b = new B();                 C c = new C();
+		...              |                                  }                               }
+		C c = new C();   |                               }                             }
+	}                    |                         디폴트 클래스는 다른 패키지의 접근 불허
+}                        |
+-------------------------------------------------------------------------------------------------------------------
+                                [public 클래스와 디폴트 클래스의 접근 사례]
+```
+
+### 멤버 접근 지정
+- public 멤버
+  - 패키지에 관계 없이 모든 클래스에게 접근 허용
+- private 멤버
+  - 동일 클래스 내에만 접근 허용
+  - 상속 받은 서브 클래스에서 접근 불가
+- protected 멤버
+  - 같은 패키지 내의 다른 모든 클래스에게 접근 허용
+  - 상속 받은 서브 클래스는 다른 패키지에 있어도 접근 가능
+- 디폴트(default) 멤버
+  - 같은 패키지 내의 다른 클래스에게 접근 허용
+- 
+| 멤버에 접근하는 클래스 | private | 디폴트 접근 지정 | protected | public |
+|----------------------|---------|----------------|-----------|--------|
+| 같은 패키지의 클래스 | ✕ | ○ | ○ | ○ |
+| 다른 패키지의 클래스 | ✕ | ✕ | ✕ | ○ |
+| 접근 가능 영역 | 클래스 내 | 동일 패키지 내 | 동일 패키지 및 자식 클래스 | 모든 클래스 |
+
+### 멤버 접근 지정자의 이해
+- public 접근 지정 사례
+```
+                                              [패키지 P]
+class A {              | public class B {                class C {
+	void f() {         |      public int n;					public void k() {
+		B b = new B(); |      public void g() {					B b = new B();
+		b.n = 3;       |		n = 5;								b.n = 7;
+		b.g();         |      }										b.g();
+	}                  | }									 }					
+}                      |                                  }
+
+b.n = 3; → public int n; ← b.n = 7;
+b.g(); → public void g() { ← b.g();
+```
+- private 접근 지정 사례
+```
+                                              [패키지 P]
+class A {              | public class B {                class C {
+	void f() {         |      public int n;					public void k() {
+		B b = new B(); |      public void g() {					B b = new B();
+		b.n = 3;       |		n = 5;								b.n = 7;
+		b.g();         |      }										b.g();
+	}                  | }									 }					
+}                      |                                  }
+
+b.n = 3; ↛  public int n; ↚  b.n = 7;
+b.g(); ↛  public void g() { ↚  b.g();
+```
+- 디폴트 접근 지정 사례
+```
+                                              [패키지 P]
+class A {              | public class B {                class C {
+	void f() {         |      public int n;					public void k() {
+		B b = new B(); |      public void g() {					B b = new B();
+		b.n = 3;       |		n = 5;								b.n = 7;
+		b.g();         |      }										b.g();
+	}                  | }									 }					
+}                      |                                  }
+
+b.n = 3; ↛  public int n; ← b.n = 7;
+b.g(); ↛  public void g() { ← b.g();
+```
+- protected 접근 지정 사례
+```
+                                              [패키지 P]
+class A {              | public class B {                class C {
+	void f() {         |      public int n;					public void k() {
+		B b = new B(); |      public void g() {					B b = new B();
+		b.n = 3;       |		n = 5;								b.n = 7;
+		b.g();         |      }										b.g();
+	}                  | }									 }					
+}                      |                                  }
+                 D가 B를 상속받음 ↑
+ 
+                class D extends B {
+					void f() { // extends는 상속받음을 나타냄
+						n = 3;
+						g();
+					}
+				 }
+
+b.n = 3; ↛  public int n; ← b.n = 7;, n = 3;
+b.g(); ↛  public void g() { ← b.g();, g();
+```
+
+#### 예제 4-10 : 멤버의 접근 지정자
+- 다음 코드의 두 클래스 Sample과 AccessEx 클래스는 동일한 패키지에 저장, 컴파일 오류를 찾아 내고 이유를 설명
+```
+class Sample {
+	public int a;
+	private int b;
+	int c;
+}
+
+public class AccessEx {
+	public static void main(String[] args) {
+		Sample aClass = new Sample();
+		aClass.a = 10;
+		aClass.b = 10;
+		aClass.c = 10;
+	}
+}
+```
+  - Sample 클래스의 a와 c는 각각 public, default 지정자로 선언이 되었으므로, 같은 패키지에 속한 AccessEx 클래스에서 접근 가능
+  - b는 private으로 선언이 되었으므로 AccessEx 클래스에서 접근 불가능
+
+### static 멤버와 non-static 멤버
+- non-static 멤버의 특성
+  - 공간적 특성 - 멤버들은 객체마다 독립적으로 별도 존재
+    - 인스턴스 멤버라고도 부름
+  - 시간적 특성 - 필드와 메소드는 객체 생성 후 비로소 사용 가능
+  - 비공유 특성 - 멤버들은 다른 객체에 의해 공유되지 않고 배타적
+- static 멤버란?
+  - 객체마다 생기는 것이 아님
+  - 클래스당 하나만 생성됨
+    - 클래스 멤버라고도 부름
+  - 객체를 생성하지 않고 사용가능
+  - 특성
+    - 공간적 특성 - staitc 멤버들은 클래스 당 하나만 생성
+    - 시간적 특성 - static 멤버들은 클래스가 로딩될 때 공간 할당
+    - 공유의 특성 - static 멤버들은 동일한 클래스의 모든 객체에 의해 공유
+```
+class StaticSample {
+	int n; // non-static 필드
+	void g() {...} // non-static 메소드
+
+	static int m; // static 필드
+	static void f() {...} // static 메소드
+}
+```
+
+### non-static 멤버와 static 멤버의 차이
+- 
+| 구분 | non-static 멤버 | static 멤버 |
+|------|----------------|-------------|
+| 선언 | ```java<br>class Sample {<br>&nbsp;&nbsp;int n;<br>&nbsp;&nbsp;void g() { ... }<br>}<br>``` | ```java<br>class Sample {<br>&nbsp;&nbsp;static int m;<br>&nbsp;&nbsp;static void f() { ... }<br>}<br>``` |
+| 공간적 특성 | 멤버는 객체마다 별도 존재<br>• 인스턴스 멤버라고 부름 | 멤버는 클래스당 하나 생성<br>• 객체 내부가 아닌 별도 공간(클래스 코드가 적재되는 메모리)에 생성<br>• 클래스 멤버라고 부름 |
+| 시간적 특성 | 객체 생성 시에 멤버 생성됨<br>• 객체가 생길 때 멤버도 생성<br>• 객체 생성 후 멤버 사용 가능<br>• 객체가 사라지면 멤버도 사라짐 | 클래스 로딩 시에 멤버 생성<br>• 객체가 생기기 전에 이미 생성<br>• 객체가 생기기 전에도 사용 가능<br>• 객체가 사라져도 멤버는 사라지지 않음<br>• 프로그램이 종료될 때 사라짐 |
+| 공유의 특성 | 공유되지 않음<br>• 멤버는 객체 내에 각각 공간 유지 | 동일한 클래스의 모든 객체에 의해 공유됨 |
