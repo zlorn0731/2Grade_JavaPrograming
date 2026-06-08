@@ -1080,3 +1080,157 @@ class StaticSample {
 | 공간적 특성 | 멤버는 객체마다 별도 존재<br>• 인스턴스 멤버라고 부름 | 멤버는 클래스당 하나 생성<br>• 객체 내부가 아닌 별도 공간에 생성<br>• 클래스 멤버라고 부름 |
 | 시간적 특성 | 객체 생성 시 멤버 생성<br>• 객체 생성 후 사용 가능<br>• 객체가 사라지면 멤버도 사라짐 | 클래스 로딩 시 멤버 생성<br>• 객체 생성 전 사용 가능<br>• 프로그램 종료 시 사라짐 |
 | 공유의 특성 | 공유되지 않음<br>• 객체마다 각각 공간 유지 | 동일한 클래스의 모든 객체가 공유 |
+
+### static의 활용
+- 1. 전역 변수와 전역 함수들 만들 때 활용
+  - 전역변수나 전역 함수는 static으로 클래스에 작성
+  - static 멤버를 가진 클래스 사례
+    - Math 클래스 : java.lang.Math
+      - 모든 필드와 메소드가 public static으로 선언
+      - 다른 모든 클래스에서 사용할 수 있음
+```
+public class Math {
+	public static int abs(int a);
+	public static double cos(double a);
+	public static int max(int a, int b);
+	public static double random();
+	...
+}
+```
+```
+// 잘못된 사용법
+❌ Math m = new Math(); // Math() 생성자는 private
+int n = m.abs(5);
+```
+```
+// 바른 사용법
+int n = Math.abs(-5);
+```
+- 2. 공유 멤버를 작성할 때
+  - static 필드나 메소드는 하나만 생성. 클래스의 객체들 공유
+ 
+#### 예제 4-11 : static 멤버를 가진 Calc 클래스 작성
+- 전역 함수로 작성하고자 하는 abs, max, min의 3개 함수를 static 메소드로 작성하고 호출하는 사례를 보여라
+```
+class Calc {
+	public static int abs(int a) { return a > 0 ? a : -a; }
+	public static int max(int a, int b) { return (a > b) ? a : b; }
+	public static int min(int a, int b) { return (a > b) ? b : a; }
+}
+
+public class CalcEx {
+	public static void main(String[] args) {
+		System.out.println(Calc.abs(-5));
+		System.out.println(Calc.max(10, 8));
+		System.out.println(Calc.min(-3, 8));
+	}
+}
+```
+
+### static 메소드의 제약 조건 1
+- static 메소드는 non-static 멤버 접근할 수 없음
+  - 객체가 생성되지 않은 상황에서도 static 메소드는 실행될 수 있기 때문에, non-static 메소드와 필드 사용 불가
+  - 반대로, non-static 메소드는 static 멤버 사용 가능
+```
+class StaticMethod {
+	int n;
+	void f1(int x) { n = x; } // 정상
+	void f2(int x) { m = x; } // 정상
+
+	static int m;
+	static void s1(int x) { n = x; } // 컴파일 오류. static 메소드는 non-static 필드 사용 불가
+	static void s2(int x) { f1(3); } // 컴파일 오류. static 메소드는 non-static 메소드 사용 불가
+
+	static void s3(int x) { m = x; } // 정상. static 메소드는 static 필드 사용 가능
+	static void s4(int x) { s3(3); } // 정상. static 메소드는 static 메소드 호출 가능
+}
+```
+
+### static 메소드의 제약 조건 2
+- static 메소드는 this 사용불가
+  - static 메소드는 객체가 생성되지 않은 상황에서도 호출이 가능하므로, 현재 객체를 가리키는 this 레퍼런스 사용할 수 없음
+```
+class StaticAndThis {
+	int n;
+	static int m;
+	void f1(int x) { this.n = x; }
+	void f2(int x) { this.m = x; } // non-static 메소드에서는 static 멤버 접근 가능
+	static void s1(int x) { this.n = x; } // 컴파일 오류. static 메소드는 this 사용 불가
+	static void s2(int x) { this.m = x; } // 컴파일 오류. static 메소드는 this 사용 불가
+}
+```
+
+#### 예제 4-12 : static을 이용한 환율 계산기
+- static 멤버를 이용하여 달러와 원화를 변환 해주는 환율 계산기를 만들어보자
+```
+class CurrencyConverter {
+	private static double rate; // 한국 원화에 대한 환율
+	public static double toDollar(double won) {
+		return won / rate; // 한국 원화를 달러로 변환
+	}
+	public static double toKWR(double dollar) {
+		return dollar * rate; // 달러를 한국 원화로 변환
+	}
+	public static void setRate(double r) {
+		rate = r; // 환율 설정. KWR / $1
+	}
+}
+
+public class StaticMember {
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("환율(1달러)>> ");
+		double rate = scanner.nextDouble();
+		CurrencyConverter.setRate(rate); // 미국 달러 환율 설정
+		System.out.println("백만원은 $" + CurrecnyConverter.toDollar(1000000) + "입니다.");
+		System.out.println("$100는 " + CurrencyConverter.toKWR(100) + "원입니다.");
+		scanner.close();
+	}
+}
+```
+
+### final 클래스와 메소드
+- final 클래스 - 클래스 상속 불가
+```
+final class FinalClass {
+		....
+}
+class SubClass extends FinalClass { // 컴파일 오류. FinalClass 상속 불가
+		....
+}
+```
+- final 메소드 - 오버라이딩 불가
+```
+public class SuperClass {
+	protected final int finalMethod {...}
+}
+
+class SubClass extends SuperClass { // SubClass가 SuperClass 상속
+	protected int findMethod() {...} // 컴파일 오류. 오버라이딩 할 수 없음
+}
+```
+
+### final 필드
+- final 필드, 상수 선언
+  - 상수를 선언할 때 사용
+  ```
+  class SharedClass {
+  	  public static final double PI = 3.14;
+  }
+  ```
+  - 상수 필드는 선언 시에 초기 값을 지정하여야 함
+  - 상수 필드는 실행 중에 값을 변경할 수 있음
+  ```
+  public class FinalFieldClass {
+  	final int ROWS = 10; // 상수 정의, 이때 초기 값(10)을 반드시 설정
+
+  	void f() {
+  		int [] intArray = new int [ROWS]; // 상수 활용
+  		ROWS = 30; // 컴파일 오류 발생. final 필드 값을 변경할 수 없음
+  	}
+  }
+  ```
+
+##### ✍️ 작성자: 박지안
+##### 🐧 실습 환경: Eclipse
+##### 🗓️ 작업일: 2026-06-08
