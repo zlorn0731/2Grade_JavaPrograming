@@ -475,4 +475,268 @@ for(int i = 0; i < c.length; i++) // c.length는 배열 c의 크기로서 5
 for(int i = 0; i < c.length; i++) // 배열에 있는 모든 Circle 객체의 면적 출력
 	System.out.print((int)(c[i].getArea()) + " "); // c[i].getArea() 배열의 원소 객체 사용
 ```
-32pg까지
+
+### 객체 배열 선언과 생성 과정
+```
+| Circle[] c; |
+
+    c [ O ]
+```
+```
+| c = new Circle[5]; |
+
+   c [ O ] ↴
+     c[0] | O |
+     c[1] | O |
+     c[2] | O |
+     c[3] | O |
+     c[4] | O |
+```
+```
+for (int i = 0; i < c.length; i++)
+		c[i] = new Circle(i);
+
+   c [ O ] ↴      Circle 객체
+     c[0] | O |→| radius = 0 |
+     c[1] | O |→| radius = 1 |
+     c[2] | O |→| radius = 2 |
+     c[3] | O |→| radius = 3 |
+     c[4] | O |→| radius = 4 |
+```
+
+#### 예제 4-6 : Circle 객체 배열 만들기
+- 반지름이 0~4인 Circle 객체 5개를 가지는 배열을 생성하고, 배열에 있는 모든 Circle 객체의 면적을 출력하라
+```
+class Circle {
+	int radius;
+	public Circle(int radius) {
+		this.radius = radius;
+	}
+	public double getArea() {
+		return 3.14 * radius * radius;
+	}
+}
+
+public class CircleArray {
+	public static void main(String[] args) {
+		Circle[] c;
+		c = new Circle[5];
+
+		for (int i = 0; i < c.length; i++)
+			c[i] = new Circle(i);
+
+		for (int i = 0; i < c.length; i++)
+			System.out.print((int)(c[i].getArea()) + " ");
+	}
+}
+```
+
+#### 예제 4-7 : 객체 배열 만들기 연습
+- 예제 4-4의 Book 클래스를 활용하여 2개짜리 Book 객체 배열을 만들고, 사용자로부터 책의 제목과 저자를 입력 받아 배열을 완성하라
+```
+import java.util.Scanner;
+class Book {
+	String title, author;
+	public Book(String title, String author) {
+		this.title = title;
+		this.author = author;
+	}
+}
+
+public class BookArray {
+	public static void main(String[] args) {
+		Book[] book = new Book[2]; // Book 배열 선언
+
+		Scanner scanner =new Scanner(System.in);
+		for(int i = 0; i < book.length; i++) {
+			System.out.print("제목>>");
+			System title = scanner.nextLine();
+			System.out.print("저자>>");
+			String author = scanner.nextLine();
+			book[i] = new Book(title, author); // 배열 원소 객체 생성
+		}
+
+		for(int i = 0; i < book.length; i++)
+			System.out.print("(" + book[i].title + ", " + book[i].author + ")");
+
+		scanner.close();
+		}
+}
+```
+
+### 메소드 형식
+- 메소드
+  - 클래스의 멤버 함수, C/C++의 함수와 동일
+  - 자바의 모든 메소드는 반드시 클래스 안에 있어야 함(캡슐화 원칙)
+- 메소드 구성 형시
+  - 접근 지정자
+    - public, private, protected, 디폴트(접근 지정자 생략된 경우)
+  - 리턴 타입
+    - 메소드가 반환하는 값의 데이터 타입
+```
+public int getSum(int i, int j) {
+	int sum;
+	sum = i + j;
+	return sum;
+}
+
+public = 접근 지정자
+int = 리턴 타입
+getSum = 메소드 이름
+int i, in j = 메소드 인자들
+
+메소드 코드
+int sum;
+sum = i + j;
+return sum;
+```
+
+### 인자 전달
+- 자바의 인자 전달 방식
+  - 경우 1. 기본 타입의 값 전달
+    - 값이 복사되어 전달
+    - 메소드의 매개변수가 변경되어도 호출한 실인자 값은 변경되지 않음
+  - 경우 2. 객체 혹은 배열 전달
+    - 객체나 배열의 레퍼런스만 전달
+      - 객체 혹은 배열이 통째로 복사되어 전달되는 것이 아님
+    - 메소드의 매개변수와 호출한 실인자 객체나 배열 공유
+
+#### 인자 전달 - 기본 타입의 값이 전달되는 경우
+- 매개변수가 byte, int, double 등 기본 타입의 값일 때
+  - 호출자가 건네는 값이 매개변수에 복사되어 전달. 실인자 값은 변경되지 않음
+```
+public class ValuePassing {
+	public static void main(String args[]) {
+		int n = 10;
+
+		increase(n);
+
+		System.out.println(n);
+	}
+
+    	호출 ↓
+
+static void increase(int m) {
+	m = m + 1;
+	}
+}
+```
+```
+main() 실행 시작
+
+int n = 10;				n[10]
+----------------------------------------------------------------------
+                                              increase(int m) 실행 시작
+increase(n);			n[10] ------------→ [10]m 
+						n[10]				[11]m	m = m + 1;
+                                              increase(int m) 종료
+----------------------------------------------------------------------
+System.out.println(n);	n[10]
+```
+
+#### 인자 전달 - 객체가 전달되는 경우
+- 객체의 레퍼런스만 전달
+  - 매개 변수가 실인자 객체 공유
+```
+public class RefrencePassing {
+	public static void main(String args[]) {
+		Circle pizza = new Circle(10);
+
+		increase(pizza);
+
+		System.out.println(pizza.radius);
+	}
+
+    	호출 ↓
+
+static void increase(Circle m) {
+	m.radius++;
+	}
+
+}
+```
+```
+main() 실행 시작
+
+pizza = new Circle(10);		pizzza[ ]→radius [10]
+----------------------------------------------------------------------
+                                              increase(Circle m) 실행 시작
+                                    레퍼런스 복사
+increase(pizza);			pizza[ ]→radius [10]←[ ]m
+
+							pizza[ ]→radius [11]←[ ]m		m.radius++;
+                                              increase(Circle m) 종료
+----------------------------------------------------------------------
+System.out.println(pizza.radius);
+							pizza[ ]→radius [11]
+```
+
+#### 인자 전달 - 배열이 전달되는 경우
+- 배열 레퍼런스만 매개 변수에 전달
+  - 배열 통째로 전달되지 않음
+  - 객체가 전달되는 경우와 동일
+  - 매개변수가 실인자의 배열을 공유
+```
+public class ArrayPassing {
+
+	public staitc void main(String args[]) {
+		int a[] = {1, 2, 3, 4, 5};
+
+		increase(a);
+
+		for(int i = 0; i < a.length; i++)
+			System.out.print(a[i] + " ");
+	}
+
+  → 레퍼런스 복사 →
+ a           array
+[ ]           [ ]
+ ↘           ↙
+     [  2  ]  1에서 바뀜
+     [  3  ]  2에서 바뀜
+     [  4  ]  3에서 바뀜
+     [  5  ]  4에서 바뀜
+     [  6  ]  5에서 바뀜
+
+static void increase(int[] array) {
+	for(int i = 0; i < array.length; i++) {
+		array[i]++;
+	}
+  }
+}
+```
+
+#### 예제 4-8 : 인자로 배열이 전달되는 예
+- char[] 배열을 전달받아 출력하는 printCharArray() 메소드와 배열 속의 공백 (' ') 문자를 ','로 대치하는 replaceSpace() 메소드를 출력하라
+```
+public class ArrayParmeterEx {
+	staic void replaceSpace(char a[]) {
+		for(int i = 0; i < a.length; i++)
+			if(a[i] == ' ')
+			a[i] = ',';
+	}
+	static void printCharArray(char a[]) {
+		for(int i = 0; i < a.length; i++)
+			System.out.print(a[i]);
+		System.out.println();
+	}
+	public static void main(String args[]) {
+		char c[] = {'T', 'h', 'i', 's', ' ', 'a', ' ', 'p', 'e', 'n', 'c', 'i', 'l', '.'};
+		printCharArray(c);
+		replaceSpace(c);
+		printCharArray(c);
+	}
+}
+```
+```
+ [ ] a		replaceSpace(char a[])
+  |
+  |
+  |
+  |
+  ↓             ,↓          ,↓      ,↓ 
+| T | h | i | s |  | i | s |   | a |   | p | e | n | c | i | l | . |
+  ↑
+ [ ] c
+```
+42pg부터
