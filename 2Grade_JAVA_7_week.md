@@ -1,5 +1,5 @@
 # ☕ Java Programming Study
-## 📘 5장 : 상속 pg 22까지
+## 📘 5장 : 상속 pg 22까지 
 
 ### 상속(inheritance)
 - 객체 지향의 상속
