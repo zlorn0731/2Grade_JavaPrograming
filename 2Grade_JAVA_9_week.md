@@ -435,3 +435,78 @@ a is equal to b
 |------|------|-----|-----|-----|-----|-----|-----|-----|
 | 기본 타입 | byte | short | int | long | char | float | double | boolean |
 | Wrapper 클래스 | Byte | Short | Integer | Long | Character | Float | Double | Boolean |
+  - 이름이 Wrapper인 클래스는 존재하지 않음
+  - 용도
+    - 기본 타입의 값을 객체로 다룰 수 있게 함
+
+### Wrapper 객체 생성
+- 기본 타입의 값으로 Wrapper 객체 생성
+```
+Integer i = Integer.valueOf(10);
+Character c = Character.valueOf('c');
+Double f = Double.valueOf(3.14);
+Boolean b = Boolean.valueOf(true);
+```
+- 문자열로 Wrapper 객체 생성
+```
+Integer I = Integer.valueOf("10");
+Double d = DoublevalueOf("3.14");
+Boolean b = Boolean.valueOf("false");
+```
+- Float 객체는 double 타입의 값으로 생성 가능
+```
+Float f = Float.valueOf((double)3.14);
+```
+
+### 주요 메소드
+- Wrapper 객체들은 거의 유사, 많은 메소드가 static 타입
+- Integer 클래스의 주요 메소드
+- 
+| 메서드 | 설명 |
+|----------|----------|
+| `static int bitCount(int i)` | 정수 i의 이진수 표현에서 1의 개수 반환 |
+| `float floatValue()` | float 타입으로 값 반환 |
+| `int intValue()` | int 타입으로 값 반환 |
+| `long longValue()` | long 타입으로 값 반환 |
+| `short shortValue()` | short 타입으로 값 반환 |
+| `static int parseInt(String s)` | 문자열 s를 10진 정수로 변환하여 반환 |
+| `static int parseInt(String s, int radix)` | 문자열 s를 지정한 진법의 정수로 변환하여 반환 |
+| `static String toBinaryString(int i)` | 정수 i를 2진수 문자열로 변환 |
+| `static String toHexString(int i)` | 정수 i를 16진수 문자열로 변환 |
+| `static String toOctalString(int i)` | 정수 i를 8진수 문자열로 변환 |
+| `static String toString(int i)` | 정수 i를 문자열로 변환 |
+| `static Integer valueOf(int i)` | 정수 i를 담은 Integer 객체 반환 |
+| `static Integer valueOf(String s)` | 문자열 s를 정수로 변환하여 담은 Integer 객체 반환 |
+
+### Wrapper 활용
+- Wrapper 객체로부터 기본 타입 값 알아내기
+```
+Integer i = Integer.valueOf(10);
+int ii = i.intValue(); // ii = 10
+
+Character c = Character.valueOf('c');
+char cc = c.charValue(); // cc = 'c'
+```
+```
+Double f = Double.valueOf(3.14);
+double dd = d.doubleValue(); // dd = 3.14
+
+Boolean b = Boolean.valueOf(true);
+boolean bb = b.booleanValue(); // bb = true
+```
+- 문자열을 기본 데이터 타입으로 변환
+```
+int i = Integer.parseInt("123"); // i = 123
+boolean b = Boolean.parseBoolean("true"); // b = true
+double f = Double.parseDouble("3.14"); // d = 3.14
+```
+- 기본 타입을 문자열로 변환
+```
+String s1 = Integer.toString(123); // 정수 123을 문자열 "123"으로 변환
+String s2 = Integer.toHexStrig(123); // 정수 123을 16진수의 문자열 "7b"로 변환
+String s3 = Double.toString(3.14); // 실수 3.14를 문자열 "3.14"로 변환
+String s4 = Character.toString('a'); // 문자 'a'를 문자열 "a"로 변환
+String s5 = Boolean.toString(true); // 불린 값 true를 문자열 "true"로 변환
+```
+
+39부터
