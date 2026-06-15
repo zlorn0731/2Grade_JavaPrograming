@@ -196,6 +196,7 @@ public class Tools { // 이제 이 클래스의 경로명은 UI.Tools가 됨
     - 모든 클래스에 강제 상속
     - 모든 객체가 공통으로 가지는 객체의 속성을 나타내는 메소드 보유
 - 주요 메소드
+- 
 | 메소드 | 설명 |
 |--------|------|
 | boolean equals(Object obj) | obj가 가리키는 객체와 현재 객체를 비교하여 같으면 true 리턴 |
@@ -429,5 +430,6 @@ a is equal to b
 
 ### Wrapper 클래스
 - 자바의 기본 타입을 클래스화한 8개 클래스
+- 
 | 기본 타입 | byte | short | int | long | char | float | double | boolean |
 | Wrapper 클래스 | Byte | Short | Integer | Long | Character | Float | Double | Boolean |
