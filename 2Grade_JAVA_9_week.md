@@ -431,5 +431,7 @@ a is equal to b
 ### Wrapper 클래스
 - 자바의 기본 타입을 클래스화한 8개 클래스
 - 
+| 타입 | 단위 | 단위 | 단위 | 단위 | 단위 | 단위 | 단위 | 단위 |
+|------|------|-----|-----|-----|-----|-----|-----|-----|
 | 기본 타입 | byte | short | int | long | char | float | double | boolean |
 | Wrapper 클래스 | Byte | Short | Integer | Long | Character | Float | Double | Boolean |
